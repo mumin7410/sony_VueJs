@@ -10,18 +10,18 @@
             rounded-[14px] 
             py-[12px] 
             px-[24px] 
-            w-[100px]
-            h-[100px]
+            w-[90px]
+            h-[90px]
             shadow-md 
             cursor-pointer 
-            hover:w-[105px] 
-            hover:h-[105px]
+            hover:w-[95px] 
+            hover:h-[95px]
         "
         @click="handleClick"
     >
         <input v-if="title == 'อัปโหลด'" type="file" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" @change="handleUpload" multiple/>
         <div v-html="icon"></div>
-        <p class="text-[14px] text-[#1C1C1C]">{{ title }}</p>
+        <p class="text-[12px] text-[#1C1C1C]">{{ title }}</p>
     </div>
 </template>
 
