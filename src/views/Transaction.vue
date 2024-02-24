@@ -93,7 +93,7 @@
       async fetchData() {
         try {
           const response = await axios.get('http://43.239.251.75:8000/api/Transaction');
-          this.data = response.data;
+          this.data = response.data.reverse();
           console.log("my data:", this.data);
         } catch (error) {
           console.error('Error fetching data:', error);

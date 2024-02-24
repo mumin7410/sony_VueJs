@@ -28,7 +28,7 @@
         <!-- camera_section -->
         <div class="h-[65%] flex flex-row justify-between mt-[15px]">
             <BTCamera title="Camera 1" video_feed="http://192.168.99.92:8000/video_feed"/>
-            <BTCamera title="Camera 2"/>
+            <BTCamera title="Camera 2" video_feed="http://192.168.99.87:8000/video_feed"/>
         </div>
       </div>
     </div>

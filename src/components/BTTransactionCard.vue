@@ -4,7 +4,7 @@
       <div class="flex flex-row items-center">
         <div>
           <div class="w-[75px] h-[75px] rounded-[12px] bg-slate-700">
-            <img :src="'http://192.168.99.92:8000'+Image" alt="Description of the image" />
+            <img :src="'http://192.168.99.87:8000'+Image" alt="Description of the image" />
           </div>
         </div>
         <div class="ml-[8px] items-center text-left">

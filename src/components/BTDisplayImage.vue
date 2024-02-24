@@ -3,7 +3,11 @@
         <!-- <p v-if="dataArray.length <= 0" class="self-center">เลือกรูปภาพจากไฟล์  หรือลากวางที่นี่</p> -->
         <div v-for="(image, index) in dataArray" :key="index" class="relative">
             <div class=" w-[30px] h-[30px] bg-red-400 absolute right-[4px] rounded-tr-[10px] rounded-bl-[10px] cursor-pointer" @click="onDelete(index)">
-
+                <img
+                        src="https://cdn-icons-png.flaticon.com/512/5028/5028066.png" 
+                        alt="Delete icon" 
+                        height="30"
+                        width="30" />
             </div>
             <img :src="image.url" alt="Uploaded Image" class="w-[150px] h-[150px] mr-[4px] rounded-[10px]">
         </div>
