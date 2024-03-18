@@ -1,13 +1,8 @@
 <template>
-    <div class="relative flex items-center justify-center">
-        <input type="search" class="text-[14px] rounded-[14px] h-[45px] pl-[40px] pr-[10px] w-[300px] border border-[#1C1C1C] focus:outline-none font-Kanit font-thin" placeholder="รหัสพนักงาน">
-        <div class="absolute left-0 ml-3">
-        <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        </div>
-    </div>
+    <label className="input input-bordered flex items-center gap-2">
+    <input type="text" className="grow" placeholder="รหัสพนักงาน" />
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" /></svg>
+    </label>
 </template>
 
 <script>

@@ -4,7 +4,7 @@
         <BTTabbar />
       </div>
       <!-- main container -->
-      <div class="w-full bg-white rounded-[14px] mx-[20px] my-[40px] flex-[0.9] p-[30px] shadow-md overflow-y-scroll">
+      <div class="w-full bg-white rounded-[14px] mx-[20px] my-[40px] flex-[0.9] p-[30px] shadow-md overflow-y-auto" style="box-shadow: 0px 0px 10px rgba(245, 248, 255, 1);">
         <!-- section_1 -->
         <div class="flex flex-row justify-between items-center">
           <p class="text-[64px] font-Kanit text-[#1C1C1C]">Transaction</p>
@@ -25,15 +25,25 @@
             </div>
           </div>
           <!-- searchbar_container -->
-          <div class="flex flex-row border-b-[1px] border-[#1C1C1C] items-center py-2">
+          <div class="flex flex-row border-b-[0px] border-[#1C1C1C] items-center py-2">
             <!-- searchbar -->
-            <BTSearchBar />
+            <label className="input input-bordered flex items-center gap-2 font-Kanit font-normal">
+              <input type="text" className="grow font-Kanit font-light text-[15px]" placeholder="รหัสพนักงาน" @input="set_filter_text" @keypress.enter="handleSearch"/>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4 opacity-70"><path fillRule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clipRule="evenodd" /></svg>
+            </label>
             <!-- dropdown_container -->
-            <BTDropdown />
+            <div className="dropdown dropdown-end ml-1">
+              <div tabIndex={0} role="button" className="btn m-1 font-Kanit font-normal">{{`กล้อง ${this.State}`}}</div>
+              <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                <li @click = "set_state('ทั้งหมด');handleCamera()"><a>กล้องทั้งหมด</a></li>
+                <li @click = "set_state(1);handleCamera()"><a>กล้อง 1</a></li>
+                <li @click = "set_state(2);handleCamera()"><a>กล้อง 2</a></li>
+              </ul>
+            </div>
           </div>
         </div>
         <!-- transactioncard section -->
-        <div class="flex flex-row flex-wrap">
+        <div class="flex flex-row flex-wrap justify-between">
           <BTTransactionCard
             v-for="item in data"
             :key="item.autoID"
@@ -44,8 +54,30 @@
             :Image="item.Image"
           />
         </div>
+        <!-- pagination -->
+        <div class="mt-[20px] justify-center align-middle flex">
+          <div className="join grid grid-cols-2 w-[30%]">
+            <button @click="prevPage()" className="join-item btn btn-outline">ย้อนกลับ</button>
+            <button @click="nextPage()" className="join-item btn btn-outline">หน้าถัดไป</button>
+          </div>
+        </div>
       </div>
     </div>
+    <!-- Dialog pleaseee stwooop -->
+    <dialog id="my_modal_1" className="modal" :open="this.please_stop">
+      <div className="modal-box">
+        <h3 className="font-bold text-lg font-Kanit">กรุณาหยุด</h3>
+        <div class="flex justify-center">
+          <iframe src="https://giphy.com/embed/9Pgr1ZDjvR1NZzuAMJ" width="250" height="270" frameBorder="0" class="giphy-embed"></iframe>
+        </div>
+        <p className="py-4 font-Kanit">ไม่มีหน้าให้ไปต่อแล้ว</p>
+        <div className="modal-action">
+          <form method="dialog">
+            <button className="btn font-Kanit" @click = "this.please_stop = false">ปิด</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
   </template>
   
   <script>
@@ -78,7 +110,36 @@
         </svg>
         `,
         Date: new Date().toLocaleString().split(' ')[0],
-        Time: new Date().toLocaleString().split(' ')[1]
+        Time: new Date().toLocaleString().split(' ')[1],
+        State: 'ทั้งหมด',
+        filter_text: '',
+        search_text: '',
+        page_count:1,
+        activePage:1,
+        please_stop:false,
+        emp_data:[
+          {
+            key:"1",
+            Name:"Sittisak",
+            CameraNo:"1",
+            DateTime:"12/12/12",
+            EmployeeID:"1",
+          },
+          {
+            key:"2",
+            Name:"Naphat",
+            CameraNo:"2",
+            DateTime:"11/11/11",
+            EmployeeID:"2",
+          },
+          {
+            key:"3",
+            Name:"Jirayu",
+            CameraNo:"2",
+            DateTime:"14/14/14",
+            EmployeeID:"3",
+          }
+        ]
       };
     },
     created() {
@@ -86,20 +147,75 @@
       setInterval(() => {
         this.Time = new Date().toLocaleString().split(' ')[1];
       }, 1000);
-  
       this.fetchData();
     },
     methods: {
       async fetchData() {
         try {
-          const response = await axios.get('http://43.239.251.75:8000/api/Transaction');
-          this.data = response.data.reverse();
-          console.log("my data:", this.data);
+          let url = `${process.env.VUE_APP_SERVER}/api/Transaction?page=${this.activePage}`;
+          if (this.State !== 'ทั้งหมด') {
+            url += `&camera_number=${this.State}`;
+          }
+          if (this.search_text !== '') {
+            url += `&search_value=${this.search_text}`;
+          }
+          const response = await axios.get(url);
+          this.data = response.data.results.reverse();
+          this.page_count = Math.ceil(response.data.count / 10)
         } catch (error) {
           console.error('Error fetching data:', error);
         }
-      }
-    }
+      },
+      set_state(state){
+        this.State = state
+      },
+      set_filter_text(e){
+        this.filter_text = e.target.value
+      },
+      async handleSearch(){
+        // search bar
+          this.activePage = 1;
+          this.search_text = this.filter_text;
+          this.fetchData();
+      },
+      async handleCamera(){
+        this.activePage = 1;
+        this.fetchData();
+      },
+      prevPage() {
+        if (this.activePage > 1) {
+          this.activePage--;
+          this.fetchData();
+        }else{
+          this.please_stop = true;
+        }
+      },
+      nextPage() {
+        console.log(this.activePage)
+        if (this.activePage < this.page_count) {
+          this.activePage++;
+          this.fetchData();
+        }else{
+          this.please_stop = true;
+        }
+      },
+    },
   };
   </script>
+
+<style>
+/* For WebKit browsers (e.g., Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 10px; /* Width of the scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1; /* Background color of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(171, 186, 206); /* Color of the scrollbar thumb */
+  border-radius: 5px; /* Radius of the scrollbar thumb */
+}
+</style>
   

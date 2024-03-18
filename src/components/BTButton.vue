@@ -21,7 +21,7 @@
     >
         <input v-if="title == 'อัปโหลด'" type="file" class="absolute inset-0 opacity-0 cursor-pointer w-full h-full" @change="handleUpload" multiple/>
         <div v-html="icon"></div>
-        <p class="text-[12px] text-[#1C1C1C]">{{ title }}</p>
+        <p class="text-[12px] text-[#1C1C1C] font-medium">{{ title }}</p>
     </div>
 </template>
 
