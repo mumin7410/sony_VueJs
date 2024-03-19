@@ -46,11 +46,11 @@
         <div class="flex flex-row flex-wrap justify-between">
           <BTTransactionCard
             v-for="item in data"
-            :key="item.autoID"
+            :key="item.id"
             :Name="item.Name"
             :CameraNo="item.CameraNo"
             :DateTime="item.DateTime"
-            :EmployeeID="item.EmployeeID"
+            :EmployeeID="item.EmpID"
             :Image="item.Image"
           />
         </div>
