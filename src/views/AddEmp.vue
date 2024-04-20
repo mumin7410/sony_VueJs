@@ -45,6 +45,7 @@ export default {
     return {
       disabled: true,
       data: [],
+      emp_info: [],
       uploadedImages: [],
       Webcam: `
         <svg width="30" height="30" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -73,8 +74,19 @@ export default {
     setInterval(() => {
       this.Time = new Date().toLocaleString().split(" ")[1];
     }, 1000);
+    this.fetchData();
   },
   methods: {
+    async fetchData() {
+      try {
+        let url = `${process.env.VUE_APP_DASHBOARD_SERVER}/EmployeeInfos`;
+        const response = await axios.get(url);
+        this.emp_info = response.data;
+        console.log('emp_info:', this.emp_info); // Log the object directly
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    },
     async clickadd() {
       try {
         const canvas = document.createElement("canvas");
@@ -167,7 +179,7 @@ export default {
 
           // Send the FormData object to the backend for Camera 1
           try {
-            await axios.post(`${process.env.CAMERA_1_URL}/upload_image/`, formData);
+            await axios.post(`${process.env.VUE_APP_CAMERA_1_URL}/upload_image/`, formData);
           } catch (error) {
             console.error("Error uploading image to Camera 1", error);
             this.errcam_1 = true;
@@ -175,7 +187,7 @@ export default {
 
           // Send the FormData object to the backend for Camera 2
           try {
-            await axios.post(`${process.env.CAMERA_2_URL}/upload_image/`, formData);
+            await axios.post(`${process.env.VUE_APP_CAMERA_2_URL}/upload_image/`, formData);
           } catch (error) {
             console.error("Error uploading image to Camera 2:", error);
             this.errcam_2 = true;
@@ -274,7 +286,7 @@ export default {
             
               <div class="camera-container">
                 <video class="w-full h-full object-fill rounded-[14px]" ref="video" autoplay></video>
-                <img src="https://cdn.discordapp.com/attachments/898169277436264450/1218691065364873236/image-removebg-preview.png?ex=66089580&is=65f62080&hm=48879683a74bad7a078d2d05cbbb977008aaa6e92a12bb999bc0bc730684d53d&"class="camera-frame" />
+                <!-- <img src="https://cdn.discordapp.com/attachments/898169277436264450/1218691065364873236/image-removebg-preview.png?ex=66089580&is=65f62080&hm=48879683a74bad7a078d2d05cbbb977008aaa6e92a12bb999bc0bc730684d53d&"class="camera-frame" /> -->
               </div>
                   
             </div>
@@ -282,8 +294,8 @@ export default {
               <Dropdown
                 v-model="selectedCity"
                 editable
-                :options="cities"
-                optionLabel="EmpName"
+                :options="emp_info"
+                optionLabel="firstName"
                 placeholder="ชื่อพนักงาน"
                 class="w-full md:w-[15rem] text-[14px] font-light"
                 :pt="{
@@ -301,8 +313,8 @@ export default {
               <Dropdown
                 v-model="selectedCity"
                 editable
-                :options="cities"
-                optionLabel="EmpId"
+                :options="emp_info"
+                optionLabel="empId"
                 placeholder="รหัสพนักงาน"
                 class="w-full md:w-[15rem] text-[14px] font-light"
                 :pt="{

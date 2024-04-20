@@ -27,8 +27,8 @@
         </div>
         <!-- camera_section -->
         <div class="h-[65%] flex flex-row justify-between mt-[15px]">
-            <BTCamera title="Camera 1" video_feed="http://192.168.99.92:8000/video_feed"/>
-            <BTCamera title="Camera 2" video_feed="http://192.168.99.87:8000/video_feed"/>
+            <BTCamera title="Camera 1" :video_feed= "video_feed_1"/>
+            <BTCamera title="Camera 2" :video_feed= "video_feed_2"/>
         </div>
       </div>
     </div>
@@ -64,6 +64,8 @@
         `,
         Date: new Date().toLocaleString().split(' ')[0],
         Time: new Date().toLocaleString().split(' ')[1],
+        video_feed_1: `${process.env.VUE_APP_CAMERA_1_URL}/video_feed`,
+        video_feed_2: `${process.env.VUE_APP_CAMERA_2_URL}/video_feed`
       };
     },
     created() {
@@ -71,20 +73,7 @@
       setInterval(() => {
         this.Time = new Date().toLocaleString().split(' ')[1];
       }, 1000);
-  
-      this.fetchData();
     },
-    methods: {
-      async fetchData() {
-        try {
-          const response = await axios.get('http://43.239.251.75:8000/api/Transaction');
-          this.data = response.data;
-          console.log("my data:", this.data);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      }
-    }
   };
   </script>
   
