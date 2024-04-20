@@ -3,8 +3,8 @@
   <div class="bg-white border-[2px] border-[#F5F8FF] px-[16px] py-[12px] inline-block rounded-[12px] mb-[12px] w-[49%] shadow-md" style="box-shadow: 0px 0px 10px rgba(245, 248, 255, 1);">
     <div class="flex flex-row items-center">
       <div>
-        <div class="w-[75px] h-[75px] rounded-[12px] bg-slate-700">
-          <img :src="imageUrl" alt="Employee Image" />
+        <div class="max-w-[75px] max-h-[75px] rounded-[12px] bg-slate-700">
+          <img :src="imageUrl" alt="Employee Image" class="max-w-[75px] max-h-[75px]"/>
         </div>
       </div>
       <div class="ml-[25px] items-center text-left">
